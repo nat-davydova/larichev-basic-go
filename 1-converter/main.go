@@ -7,5 +7,5 @@ func main() {
 	const USDtoRUB = 81.18
 	const EURtoRUB = USDtoRUB / USDtoEUR
 
-	fmt.Printf("EURtoRUB", EURtoRUB)
+	fmt.Println("EURtoRUB", EURtoRUB)
 }
