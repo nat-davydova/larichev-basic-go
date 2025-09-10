@@ -6,6 +6,8 @@ import (
 )
 
 func main() {
+	var description string
+
 	fmt.Println("BMI calculator")
 
 	userHeightCm, userWeightKg := getUserInput()
@@ -14,11 +16,16 @@ func main() {
 
 	BMI := calcBMI(userHeightMeters, userWeightKg)
 
-	outputResult(BMI)
+	if BMI < 16 {
+		description = "BMI is too small"
+	}
+
+	outputResult(BMI, description)
 }
 
-func outputResult(result float64) {
-	fmt.Printf("Your BMI is: %.0f", result)
+func outputResult(result float64, description string) {
+	fmt.Printf("Your BMI is: %.0f \n", result)
+	fmt.Println(description)
 }
 
 func calcBMI(height float64, weight float64) float64 {
