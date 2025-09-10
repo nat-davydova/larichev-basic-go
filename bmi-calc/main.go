@@ -16,16 +16,26 @@ func main() {
 
 	BMI := calcBMI(userHeightMeters, userWeightKg)
 
-	if BMI < 16 {
+	switch {
+	case BMI < 16:
 		description = "BMI is too small"
+	case BMI > 16 && BMI < 18.5:
+		description = "BMI is small"
+	case BMI < 25:
+		description = "BMI is normal"
+	case BMI < 35:
+		description = "BMI is large"
+	case BMI >= 35:
+		description = "BMI is too large"
+	default:
+		description = "Sorry, are you a human?"
 	}
 
 	outputResult(BMI, description)
 }
 
 func outputResult(result float64, description string) {
-	fmt.Printf("Your BMI is: %.0f \n", result)
-	fmt.Println(description)
+	fmt.Printf("Your BMI is: %.0f, %v", result, description)
 }
 
 func calcBMI(height float64, weight float64) float64 {
