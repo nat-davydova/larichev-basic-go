@@ -6,14 +6,14 @@ import (
 )
 
 func main() {
-	var isOneMoreTime bool = true
 
 	fmt.Println("BMI calculator")
 
-	for isOneMoreTime {
-		if isOneMoreTime {
-			handleBMI()
-		} else {
+	for {
+		handleBMI()
+		isOneMoreTime := getIsOneMoreTime()
+
+		if !isOneMoreTime {
 			break
 		}
 	}
@@ -23,7 +23,7 @@ func main() {
 func handleBMI() {
 	var description string
 
-	userHeightCm, userWeightKg := getUserInput()
+	userHeightCm, userWeightKg := getUserBMIInput()
 
 	var userHeightMeters = userHeightCm / 100
 
@@ -56,7 +56,7 @@ func calcBMI(height float64, weight float64) float64 {
 	return weight / math.Pow(height, BMIPow)
 }
 
-func getUserInput() (float64, float64) {
+func getUserBMIInput() (float64, float64) {
 	var userHeightCm float64
 	var userWeightKg float64
 
@@ -67,4 +67,13 @@ func getUserInput() (float64, float64) {
 	fmt.Scan(&userWeightKg)
 
 	return userHeightCm, userWeightKg
+}
+
+func getIsOneMoreTime() bool {
+	var isOneMoreTime string
+
+	fmt.Println("Press Y if you want to calc once again")
+	fmt.Scan(&isOneMoreTime)
+
+	return isOneMoreTime == "Y" || isOneMoreTime == "y"
 }
