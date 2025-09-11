@@ -6,9 +6,22 @@ import (
 )
 
 func main() {
-	var description string
+	var isOneMoreTime bool = true
 
 	fmt.Println("BMI calculator")
+
+	for isOneMoreTime {
+		if isOneMoreTime {
+			handleBMI()
+		} else {
+			break
+		}
+	}
+
+}
+
+func handleBMI() {
+	var description string
 
 	userHeightCm, userWeightKg := getUserInput()
 
@@ -35,7 +48,7 @@ func main() {
 }
 
 func outputResult(result float64, description string) {
-	fmt.Printf("Your BMI is: %.0f, %v", result, description)
+	fmt.Printf("Your BMI is: %.0f, %v \n ______________ \n", result, description)
 }
 
 func calcBMI(height float64, weight float64) float64 {
