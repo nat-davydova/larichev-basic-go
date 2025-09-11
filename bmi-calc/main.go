@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"math"
 )
@@ -27,7 +28,12 @@ func handleBMI() {
 
 	var userHeightMeters = userHeightCm / 100
 
-	BMI := calcBMI(userHeightMeters, userWeightKg)
+	BMI, err := calcBMI(userHeightMeters, userWeightKg)
+
+	if err != nil {
+		fmt.Printf("Error calculating BMI: %v\n", err)
+		return
+	}
 
 	switch {
 	case BMI < 16:
@@ -51,9 +57,13 @@ func outputResult(result float64, description string) {
 	fmt.Printf("Your BMI is: %.0f, %v \n ______________ \n", result, description)
 }
 
-func calcBMI(height float64, weight float64) float64 {
+func calcBMI(height float64, weight float64) (float64, error) {
+	if weight <= 0 || height <= 0 {
+		return 0, errors.New("invalid parameters")
+	}
+
 	const BMIPow = 2
-	return weight / math.Pow(height, BMIPow)
+	return weight / math.Pow(height, BMIPow), nil
 }
 
 func getUserBMIInput() (float64, float64) {
