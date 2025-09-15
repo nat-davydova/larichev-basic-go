@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"strconv"
 )
 
 func main() {
@@ -24,8 +25,10 @@ func getUserInput() (string, string, float64) {
 	var inputCurrency string
 	var inputCurrencyErr error
 
-	var targetCurrency string
 	var moneyAmount float64
+	var moneyAmountErr error
+
+	var targetCurrency string
 
 	for {
 		inputCurrency, inputCurrencyErr = getInputCurrency()
@@ -35,11 +38,16 @@ func getUserInput() (string, string, float64) {
 		}
 	}
 
+	for {
+		moneyAmount, moneyAmountErr = getMoneyAmount()
+
+		if moneyAmountErr == nil {
+			break
+		}
+	}
+
 	fmt.Println("Enter your target currency:")
 	fmt.Scan(&targetCurrency)
-
-	fmt.Println("Enter your money amount:")
-	fmt.Scan(&moneyAmount)
 
 	return inputCurrency, targetCurrency, moneyAmount
 }
@@ -55,6 +63,21 @@ func getInputCurrency() (string, error) {
 	}
 
 	return initCurrency, nil
+}
+
+func getMoneyAmount() (float64, error) {
+	var moneyAmount string
+
+	fmt.Println("Enter your money amount:")
+	fmt.Scan(&moneyAmount)
+
+	parsed, err := strconv.ParseFloat(moneyAmount, 64)
+
+	if err == nil {
+		return parsed, nil
+	} else {
+		return -1, errors.New("invalid money amount")
+	}
 }
 
 func convertCurrencies(initCurrency string, targetCurrency string, moneyAmount float64) float64 {
