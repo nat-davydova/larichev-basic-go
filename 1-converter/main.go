@@ -7,19 +7,27 @@ import (
 	"strings"
 )
 
+const USDtoEUR = 0.85
+const USDtoRUB = 81.18
+const EURtoRUB = USDtoRUB / USDtoEUR
+
 func main() {
 	var initCurrency string
 	var targetCurrency string
 	var moneyAmount float64
 
-	const USDtoEUR = 0.85
-	const USDtoRUB = 81.18
-	const EURtoRUB = USDtoRUB / USDtoEUR
-
 	initCurrency, targetCurrency, moneyAmount = getUserInput()
 
-	fmt.Println("EURtoRUB", EURtoRUB)
-	fmt.Printf("init currency - %v, target currency - %v, money amount - %v", initCurrency, targetCurrency, moneyAmount)
+	convertedMoneyAmount, err := convertCurrencies(initCurrency, targetCurrency, moneyAmount)
+
+	targetCurrencyFormatted := strings.ToUpper(targetCurrency)
+
+	if err == nil {
+		fmt.Printf("Your converted money amount: %.2f %v \n", convertedMoneyAmount, targetCurrencyFormatted)
+	} else {
+		fmt.Printf("Convertion error: %v \n", err)
+	}
+
 }
 
 func getUserInput() (string, string, float64) {
@@ -130,7 +138,29 @@ func getTargetCurrency(inputCurrency string) (string, error) {
 	return targetCurrency, nil
 }
 
-func convertCurrencies(initCurrency string, targetCurrency string, moneyAmount float64) float64 {
-	fmt.Printf("init currency - %v, target currency - %v, money amount - %v", initCurrency, targetCurrency, moneyAmount)
-	return moneyAmount
+func convertCurrencies(initCurrency string, targetCurrency string, moneyAmount float64) (float64, error) {
+	var convertedMoneyAmount float64
+
+	initCurrencyFormatted := strings.ToLower(initCurrency)
+	targetCurrencyFormatted := strings.ToLower(targetCurrency)
+
+	switch {
+	case initCurrencyFormatted == "usd" && targetCurrencyFormatted == "eur":
+		convertedMoneyAmount = moneyAmount * USDtoEUR
+	case initCurrencyFormatted == "usd" && targetCurrencyFormatted == "rub":
+		convertedMoneyAmount = moneyAmount * USDtoRUB
+	case initCurrencyFormatted == "eur" && targetCurrencyFormatted == "usd":
+		convertedMoneyAmount = moneyAmount / USDtoEUR
+	case initCurrencyFormatted == "eur" && targetCurrencyFormatted == "rub":
+		convertedMoneyAmount = moneyAmount * EURtoRUB
+	case initCurrencyFormatted == "rub" && targetCurrencyFormatted == "usd":
+		convertedMoneyAmount = moneyAmount / USDtoRUB
+	case initCurrencyFormatted == "rub" && targetCurrencyFormatted == "eur":
+		convertedMoneyAmount = moneyAmount / EURtoRUB
+	default:
+		errorText := fmt.Sprintf("invalid converting %v %v in %v", initCurrency, moneyAmount, targetCurrency)
+		return -1, errors.New(errorText)
+	}
+
+	return convertedMoneyAmount, nil
 }
