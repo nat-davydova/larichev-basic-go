@@ -11,6 +11,10 @@ const USDtoEUR = 0.85
 const USDtoRUB = 81.18
 const EURtoRUB = USDtoRUB / USDtoEUR
 
+const usd = "usd"
+const eur = "eur"
+const rub = "rub"
+
 func main() {
 	var initCurrency string
 	var targetCurrency string
@@ -81,7 +85,7 @@ func getInputCurrency() (string, error) {
 
 	initCurrencyFormatted := strings.ToLower(initCurrency)
 
-	if initCurrencyFormatted != "rub" && initCurrencyFormatted != "usd" && initCurrencyFormatted != "eur" {
+	if initCurrencyFormatted != rub && initCurrencyFormatted != usd && initCurrencyFormatted != eur {
 		return "", errors.New("invalid init currency, you're allowed to enter only one of (RUB, USD, EUR)")
 	}
 
@@ -110,11 +114,11 @@ func getTargetCurrency(inputCurrency string) (string, error) {
 	inputCurrencyFormatted := strings.ToLower(inputCurrency)
 
 	switch inputCurrencyFormatted {
-	case "eur":
+	case eur:
 		description = "(USD, RUB)"
-	case "usd":
+	case usd:
 		description = "(EUR, RUB)"
-	case "rub":
+	case rub:
 		description = "(EUR, USD)"
 	default:
 		return "", errors.New("invalid init currency")
@@ -126,9 +130,9 @@ func getTargetCurrency(inputCurrency string) (string, error) {
 	targetCurrencyFormatted := strings.ToLower(targetCurrency)
 
 	switch {
-	case inputCurrencyFormatted == "eur" && (targetCurrencyFormatted == "usd" || targetCurrencyFormatted == "rub"):
-	case inputCurrencyFormatted == "usd" && (targetCurrencyFormatted == "eur" || targetCurrencyFormatted == "rub"):
-	case inputCurrencyFormatted == "rub" && (targetCurrencyFormatted == "eur" || targetCurrencyFormatted == "usd"):
+	case inputCurrencyFormatted == eur && (targetCurrencyFormatted == usd || targetCurrencyFormatted == rub):
+	case inputCurrencyFormatted == usd && (targetCurrencyFormatted == eur || targetCurrencyFormatted == rub):
+	case inputCurrencyFormatted == rub && (targetCurrencyFormatted == eur || targetCurrencyFormatted == usd):
 		return targetCurrency, nil
 	default:
 		errorText := fmt.Sprintf("invalid target currency, you're allowed to enter only one of %v", description)
@@ -145,17 +149,17 @@ func convertCurrencies(initCurrency string, targetCurrency string, moneyAmount f
 	targetCurrencyFormatted := strings.ToLower(targetCurrency)
 
 	switch {
-	case initCurrencyFormatted == "usd" && targetCurrencyFormatted == "eur":
+	case initCurrencyFormatted == usd && targetCurrencyFormatted == eur:
 		convertedMoneyAmount = moneyAmount * USDtoEUR
-	case initCurrencyFormatted == "usd" && targetCurrencyFormatted == "rub":
+	case initCurrencyFormatted == usd && targetCurrencyFormatted == rub:
 		convertedMoneyAmount = moneyAmount * USDtoRUB
-	case initCurrencyFormatted == "eur" && targetCurrencyFormatted == "usd":
+	case initCurrencyFormatted == eur && targetCurrencyFormatted == usd:
 		convertedMoneyAmount = moneyAmount / USDtoEUR
-	case initCurrencyFormatted == "eur" && targetCurrencyFormatted == "rub":
+	case initCurrencyFormatted == eur && targetCurrencyFormatted == rub:
 		convertedMoneyAmount = moneyAmount * EURtoRUB
-	case initCurrencyFormatted == "rub" && targetCurrencyFormatted == "usd":
+	case initCurrencyFormatted == rub && targetCurrencyFormatted == usd:
 		convertedMoneyAmount = moneyAmount / USDtoRUB
-	case initCurrencyFormatted == "rub" && targetCurrencyFormatted == "eur":
+	case initCurrencyFormatted == rub && targetCurrencyFormatted == eur:
 		convertedMoneyAmount = moneyAmount / EURtoRUB
 	default:
 		errorText := fmt.Sprintf("invalid converting %v %v in %v", initCurrency, moneyAmount, targetCurrency)
