@@ -7,6 +7,11 @@ import (
 )
 
 func main() {
+	defer func() {
+		if recover := recover(); recover != nil {
+			fmt.Println("Recovered from panic:", recover)
+		}
+	}()
 
 	fmt.Println("BMI calculator")
 
@@ -31,8 +36,7 @@ func handleBMI() {
 	BMI, err := calcBMI(userHeightMeters, userWeightKg)
 
 	if err != nil {
-		fmt.Printf("Error calculating BMI: %v\n", err)
-		return
+		panic("Incorrect height or weight")
 	}
 
 	switch {
