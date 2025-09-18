@@ -34,33 +34,9 @@ func main() {
 }
 
 func getUserInput() (string, string, float64) {
-	var moneyAmount float64
-	var moneyAmountErr error
-
-	var targetCurrency string
-	var targetCurrencyErr error
-
-	inputCurrency, inputCurrencyErr := getInputCurrency()
-
-	for {
-		moneyAmount, moneyAmountErr = getMoneyAmount()
-
-		if moneyAmountErr == nil {
-			break
-		} else {
-			fmt.Printf("Error getting input currency - %v\n", moneyAmountErr)
-		}
-	}
-
-	for {
-		targetCurrency, targetCurrencyErr = getTargetCurrency(inputCurrency)
-
-		if targetCurrencyErr == nil {
-			break
-		} else {
-			fmt.Printf("Error getting target currency - %v\n", targetCurrencyErr)
-		}
-	}
+	inputCurrency, _ := getInputCurrency()
+	moneyAmount, _ := getMoneyAnount()
+	targetCurrency, _ := getTargetCurrency(inputCurrency)
 
 	return inputCurrency, targetCurrency, moneyAmount
 }
@@ -81,7 +57,7 @@ func getInputCurrencyUserInput() (string, error) {
 	return inputCurrency, nil
 }
 
-func getMoneyAmount() (float64, error) {
+func getMoneyAmountUserInput() (float64, error) {
 	var moneyAmount string
 
 	fmt.Println("Enter your money amount:")
@@ -99,7 +75,7 @@ func getMoneyAmount() (float64, error) {
 	}
 }
 
-func getTargetCurrency(inputCurrency string) (string, error) {
+func getTargetCurrencyInput(inputCurrency string) (string, error) {
 	var targetCurrency string
 	var description string
 
@@ -170,7 +146,31 @@ func getInputCurrency() (string, error) {
 		return inputCurrency, nil
 	} else {
 		fmt.Printf("Error getting input currency - %v\n", inputCurrencyErr)
-		getInputCurrency()
-		return "", inputCurrencyErr
+		val, err := getInputCurrency()
+		return val, err
+	}
+}
+
+func getMoneyAnount() (float64, error) {
+	moneyAmount, moneyAmountErr := getMoneyAmountUserInput()
+
+	if moneyAmountErr == nil {
+		return moneyAmount, nil
+	} else {
+		fmt.Printf("Error getting input currency - %v\n", moneyAmountErr)
+		val, err := getMoneyAnount()
+		return val, err
+	}
+}
+
+func getTargetCurrency(inputCurrency string) (string, error) {
+	targetCurrency, targetCurrencyErr := getTargetCurrencyInput(inputCurrency)
+
+	if targetCurrencyErr == nil {
+		return targetCurrency, nil
+	} else {
+		fmt.Printf("Error getting target currency - %v\n", targetCurrencyErr)
+		val, err := getTargetCurrency(inputCurrency)
+		return val, err
 	}
 }
