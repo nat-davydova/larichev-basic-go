@@ -7,13 +7,17 @@ import (
 	"strings"
 )
 
-const USDtoEUR = 0.85
-const USDtoRUB = 81.18
-const EURtoRUB = USDtoRUB / USDtoEUR
+const (
+	USDtoEUR = 0.85
+	USDtoRUB = 81.18
+	EURtoRUB = USDtoRUB / USDtoEUR
+)
 
-const usd = "usd"
-const eur = "eur"
-const rub = "rub"
+const (
+	usd = "usd"
+	eur = "eur"
+	rub = "rub"
+)
 
 func main() {
 	initCurrency, targetCurrency, moneyAmount := getUserInput()
