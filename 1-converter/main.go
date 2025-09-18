@@ -34,23 +34,16 @@ func main() {
 }
 
 func getUserInput() (string, string, float64) {
-	var inputCurrency string
-	var inputCurrencyErr error
-
 	var moneyAmount float64
 	var moneyAmountErr error
 
 	var targetCurrency string
 	var targetCurrencyErr error
 
-	for {
-		inputCurrency, inputCurrencyErr = getInputCurrency()
+	inputCurrency, inputCurrencyErr := getInputCurrency()
 
-		if inputCurrencyErr == nil {
-			break
-		} else {
-			fmt.Printf("Error getting input currency - %v\n", inputCurrencyErr)
-		}
+	if inputCurrencyErr != nil {
+		panic(inputCurrencyErr)
 	}
 
 	for {
@@ -76,7 +69,7 @@ func getUserInput() (string, string, float64) {
 	return inputCurrency, targetCurrency, moneyAmount
 }
 
-func getInputCurrency() (string, error) {
+func getInputCurrencyUserInput() (string, error) {
 	var inputCurrency string
 
 	fmt.Println("Enter your init currency (RUB, USD, EUR):")
@@ -172,4 +165,16 @@ func convertCurrencies(initCurrency string, targetCurrency string, moneyAmount f
 	}
 
 	return convertedMoneyAmount, nil
+}
+
+func getInputCurrency() (string, error) {
+	inputCurrency, inputCurrencyErr := getInputCurrencyUserInput()
+
+	if inputCurrencyErr == nil {
+		return inputCurrency, nil
+	} else {
+		fmt.Printf("Error getting input currency - %v\n", inputCurrencyErr)
+		getInputCurrency()
+		return "", inputCurrencyErr
+	}
 }
