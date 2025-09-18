@@ -96,10 +96,10 @@ func getMoneyAmount() (float64, error) {
 
 	parsed, err := strconv.ParseFloat(moneyAmount, 64)
 
-	if err == nil {
+	if err == nil && parsed > 0 {
 		return parsed, nil
 	} else {
-		return -1, errors.New("invalid money amount, you're allowed to enter only numbers")
+		return -1, errors.New("invalid money amount, you're allowed to enter only positive numbers")
 	}
 }
 
