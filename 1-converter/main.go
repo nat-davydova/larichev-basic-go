@@ -99,8 +99,9 @@ func getMoneyAmount() (float64, error) {
 	fmt.Scan(&moneyAmount)
 
 	moneyAmountTrimmed := strings.TrimSpace(moneyAmount)
+	moneyAmountFormatted := strings.ReplaceAll(moneyAmountTrimmed, ",", ".")
 
-	parsed, err := strconv.ParseFloat(moneyAmountTrimmed, 64)
+	parsed, err := strconv.ParseFloat(moneyAmountFormatted, 64)
 
 	if err == nil && parsed > 0 {
 		return parsed, nil
