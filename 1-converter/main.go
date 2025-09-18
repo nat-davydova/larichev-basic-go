@@ -16,11 +16,7 @@ const eur = "eur"
 const rub = "rub"
 
 func main() {
-	var initCurrency string
-	var targetCurrency string
-	var moneyAmount float64
-
-	initCurrency, targetCurrency, moneyAmount = getUserInput()
+	initCurrency, targetCurrency, moneyAmount := getUserInput()
 
 	convertedMoneyAmount, err := convertCurrencies(initCurrency, targetCurrency, moneyAmount)
 
