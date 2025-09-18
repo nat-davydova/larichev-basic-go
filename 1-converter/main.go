@@ -24,9 +24,8 @@ func main() {
 
 	convertedMoneyAmount, err := convertCurrencies(initCurrency, targetCurrency, moneyAmount)
 
-	targetCurrencyFormatted := strings.ToUpper(targetCurrency)
-
 	if err == nil {
+		targetCurrencyFormatted := strings.ToUpper(targetCurrency)
 		fmt.Printf("Your converted money amount: %.2f %v \n", convertedMoneyAmount, targetCurrencyFormatted)
 	} else {
 		fmt.Printf("Convertion error: %v \n", err)
