@@ -74,18 +74,19 @@ func getUserInput() (string, string, float64) {
 }
 
 func getInputCurrency() (string, error) {
-	var initCurrency string
+	var inputCurrency string
 
 	fmt.Println("Enter your init currency (RUB, USD, EUR):")
-	fmt.Scan(&initCurrency)
+	fmt.Scan(&inputCurrency)
 
-	initCurrencyFormatted := strings.ToLower(initCurrency)
+	inputCurrencyTrimmed := strings.TrimSpace(inputCurrency)
+	inputCurrencyFormatted := strings.ToLower(inputCurrencyTrimmed)
 
-	if initCurrencyFormatted != rub && initCurrencyFormatted != usd && initCurrencyFormatted != eur {
+	if inputCurrencyFormatted != rub && inputCurrencyFormatted != usd && inputCurrencyFormatted != eur {
 		return "", errors.New("invalid init currency, you're allowed to enter only one of (RUB, USD, EUR)")
 	}
 
-	return initCurrency, nil
+	return inputCurrency, nil
 }
 
 func getMoneyAmount() (float64, error) {
@@ -94,7 +95,9 @@ func getMoneyAmount() (float64, error) {
 	fmt.Println("Enter your money amount:")
 	fmt.Scan(&moneyAmount)
 
-	parsed, err := strconv.ParseFloat(moneyAmount, 64)
+	moneyAmountTrimmed := strings.TrimSpace(moneyAmount)
+
+	parsed, err := strconv.ParseFloat(moneyAmountTrimmed, 64)
 
 	if err == nil && parsed > 0 {
 		return parsed, nil
@@ -107,7 +110,8 @@ func getTargetCurrency(inputCurrency string) (string, error) {
 	var targetCurrency string
 	var description string
 
-	inputCurrencyFormatted := strings.ToLower(inputCurrency)
+	inputCurrencyTrimmed := strings.TrimSpace(inputCurrency)
+	inputCurrencyFormatted := strings.ToLower(inputCurrencyTrimmed)
 
 	switch inputCurrencyFormatted {
 	case eur:
@@ -123,7 +127,8 @@ func getTargetCurrency(inputCurrency string) (string, error) {
 	fmt.Printf("Enter your target currency %v:", description)
 	fmt.Scan(&targetCurrency)
 
-	targetCurrencyFormatted := strings.ToLower(targetCurrency)
+	targetCurrencyTrimmed := strings.TrimSpace(targetCurrency)
+	targetCurrencyFormatted := strings.ToLower(targetCurrencyTrimmed)
 
 	switch {
 	case inputCurrencyFormatted == eur && (targetCurrencyFormatted == usd || targetCurrencyFormatted == rub):
