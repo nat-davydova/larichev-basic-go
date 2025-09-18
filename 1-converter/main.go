@@ -8,9 +8,9 @@ import (
 )
 
 const (
-	USDtoEUR = 0.85
-	USDtoRUB = 81.18
-	EURtoRUB = USDtoRUB / USDtoEUR
+	usdToEur = 0.85
+	usdToRub = 81.18
+	eurToRub = usdToRub / usdToEur
 )
 
 const (
@@ -155,17 +155,17 @@ func convertCurrencies(initCurrency string, targetCurrency string, moneyAmount f
 
 	switch {
 	case initCurrencyFormatted == usd && targetCurrencyFormatted == eur:
-		convertedMoneyAmount = moneyAmount * USDtoEUR
+		convertedMoneyAmount = moneyAmount * usdToEur
 	case initCurrencyFormatted == usd && targetCurrencyFormatted == rub:
-		convertedMoneyAmount = moneyAmount * USDtoRUB
+		convertedMoneyAmount = moneyAmount * usdToRub
 	case initCurrencyFormatted == eur && targetCurrencyFormatted == usd:
-		convertedMoneyAmount = moneyAmount / USDtoEUR
+		convertedMoneyAmount = moneyAmount / usdToEur
 	case initCurrencyFormatted == eur && targetCurrencyFormatted == rub:
-		convertedMoneyAmount = moneyAmount * EURtoRUB
+		convertedMoneyAmount = moneyAmount * eurToRub
 	case initCurrencyFormatted == rub && targetCurrencyFormatted == usd:
-		convertedMoneyAmount = moneyAmount / USDtoRUB
+		convertedMoneyAmount = moneyAmount / usdToRub
 	case initCurrencyFormatted == rub && targetCurrencyFormatted == eur:
-		convertedMoneyAmount = moneyAmount / EURtoRUB
+		convertedMoneyAmount = moneyAmount / eurToRub
 	default:
 		errorText := fmt.Sprintf("invalid converting %v %v in %v", initCurrency, moneyAmount, targetCurrency)
 		return -1, errors.New(errorText)
