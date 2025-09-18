@@ -42,10 +42,6 @@ func getUserInput() (string, string, float64) {
 
 	inputCurrency, inputCurrencyErr := getInputCurrency()
 
-	if inputCurrencyErr != nil {
-		panic(inputCurrencyErr)
-	}
-
 	for {
 		moneyAmount, moneyAmountErr = getMoneyAmount()
 
