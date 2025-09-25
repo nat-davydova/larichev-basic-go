@@ -20,9 +20,9 @@ const (
 )
 
 func main() {
-	initCurrency, targetCurrency, moneyAmount := getUserInput()
+	inputCurrency, targetCurrency, moneyAmount := getUserInput()
 
-	convertedMoneyAmount, err := convertCurrencies(initCurrency, targetCurrency, moneyAmount)
+	convertedMoneyAmount, err := convertCurrencies(inputCurrency, targetCurrency, moneyAmount)
 
 	if err != nil {
 		fmt.Printf("Convertion error: %v \n", err)
