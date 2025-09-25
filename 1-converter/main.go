@@ -48,8 +48,7 @@ func getInputCurrencyUserInput() (string, error) {
 	fmt.Println("Enter your init currency (RUB, USD, EUR):")
 	fmt.Scan(&inputCurrency)
 
-	inputCurrencyTrimmed := strings.TrimSpace(inputCurrency)
-	inputCurrencyFormatted := strings.ToLower(inputCurrencyTrimmed)
+	inputCurrencyFormatted := formatInput(inputCurrency)
 
 	if inputCurrencyFormatted != rub && inputCurrencyFormatted != usd && inputCurrencyFormatted != eur {
 		return "", errors.New("invalid init currency, you're allowed to enter only one of (RUB, USD, EUR)")
@@ -64,10 +63,10 @@ func getMoneyAmountUserInput() (float64, error) {
 	fmt.Println("Enter your money amount:")
 	fmt.Scan(&moneyAmount)
 
-	moneyAmountTrimmed := strings.TrimSpace(moneyAmount)
-	moneyAmountFormatted := strings.ReplaceAll(moneyAmountTrimmed, ",", ".")
+	moneyAmountFormatted := formatInput(moneyAmount)
+	moneyAmountReplaced := strings.ReplaceAll(moneyAmountFormatted, ",", ".")
 
-	parsed, err := strconv.ParseFloat(moneyAmountFormatted, 64)
+	parsed, err := strconv.ParseFloat(moneyAmountReplaced, 64)
 
 	if err != nil || parsed <= 0 {
 		return -1, errors.New("invalid money amount, you're allowed to enter only positive numbers")
@@ -80,8 +79,7 @@ func getTargetCurrencyInput(inputCurrency string) (string, error) {
 	var targetCurrency string
 	var description string
 
-	inputCurrencyTrimmed := strings.TrimSpace(inputCurrency)
-	inputCurrencyFormatted := strings.ToLower(inputCurrencyTrimmed)
+	inputCurrencyFormatted := formatInput(inputCurrency)
 
 	switch inputCurrencyFormatted {
 	case eur:
@@ -97,8 +95,7 @@ func getTargetCurrencyInput(inputCurrency string) (string, error) {
 	fmt.Printf("Enter your target currency %v:", description)
 	fmt.Scan(&targetCurrency)
 
-	targetCurrencyTrimmed := strings.TrimSpace(targetCurrency)
-	targetCurrencyFormatted := strings.ToLower(targetCurrencyTrimmed)
+	targetCurrencyFormatted := formatInput(targetCurrency)
 
 	switch {
 	case inputCurrencyFormatted == eur && (targetCurrencyFormatted == usd || targetCurrencyFormatted == rub):
@@ -116,8 +113,8 @@ func getTargetCurrencyInput(inputCurrency string) (string, error) {
 func convertCurrencies(initCurrency string, targetCurrency string, moneyAmount float64) (float64, error) {
 	var convertedMoneyAmount float64
 
-	initCurrencyFormatted := strings.ToLower(initCurrency)
-	targetCurrencyFormatted := strings.ToLower(targetCurrency)
+	initCurrencyFormatted := formatInput(initCurrency)
+	targetCurrencyFormatted := formatInput(targetCurrency)
 
 	switch {
 	case initCurrencyFormatted == usd && targetCurrencyFormatted == eur:
@@ -174,4 +171,11 @@ func getTargetCurrency(inputCurrency string) string {
 		val := getTargetCurrency(inputCurrency)
 		return val
 	}
+}
+
+func formatInput(input string) string {
+	lowerCased := strings.ToLower(input)
+	trimmed := strings.TrimSpace(lowerCased)
+
+	return trimmed
 }
