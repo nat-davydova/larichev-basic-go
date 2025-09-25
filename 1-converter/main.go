@@ -34,9 +34,9 @@ func main() {
 }
 
 func getUserInput() (string, string, float64) {
-	inputCurrency, _ := getInputCurrency()
-	moneyAmount, _ := getMoneyAnount()
-	targetCurrency, _ := getTargetCurrency(inputCurrency)
+	inputCurrency := getInputCurrency()
+	moneyAmount := getMoneyAnount()
+	targetCurrency := getTargetCurrency(inputCurrency)
 
 	return inputCurrency, targetCurrency, moneyAmount
 }
@@ -139,38 +139,38 @@ func convertCurrencies(initCurrency string, targetCurrency string, moneyAmount f
 	return convertedMoneyAmount, nil
 }
 
-func getInputCurrency() (string, error) {
+func getInputCurrency() string {
 	inputCurrency, inputCurrencyErr := getInputCurrencyUserInput()
 
 	if inputCurrencyErr == nil {
-		return inputCurrency, nil
+		return inputCurrency
 	} else {
 		fmt.Printf("Error getting input currency - %v\n", inputCurrencyErr)
-		val, err := getInputCurrency()
-		return val, err
+		val := getInputCurrency()
+		return val
 	}
 }
 
-func getMoneyAnount() (float64, error) {
+func getMoneyAnount() float64 {
 	moneyAmount, moneyAmountErr := getMoneyAmountUserInput()
 
 	if moneyAmountErr == nil {
-		return moneyAmount, nil
+		return moneyAmount
 	} else {
 		fmt.Printf("Error getting input currency - %v\n", moneyAmountErr)
-		val, err := getMoneyAnount()
-		return val, err
+		val := getMoneyAnount()
+		return val
 	}
 }
 
-func getTargetCurrency(inputCurrency string) (string, error) {
+func getTargetCurrency(inputCurrency string) string {
 	targetCurrency, targetCurrencyErr := getTargetCurrencyInput(inputCurrency)
 
 	if targetCurrencyErr == nil {
-		return targetCurrency, nil
+		return targetCurrency
 	} else {
 		fmt.Printf("Error getting target currency - %v\n", targetCurrencyErr)
-		val, err := getTargetCurrency(inputCurrency)
-		return val, err
+		val := getTargetCurrency(inputCurrency)
+		return val
 	}
 }
