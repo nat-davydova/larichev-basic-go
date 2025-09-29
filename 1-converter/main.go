@@ -20,7 +20,9 @@ const (
 )
 
 func main() {
-	inputCurrency, targetCurrency, moneyAmount := getUserInput()
+	inputCurrency := getInputCurrency()
+	moneyAmount := getMoneyAmount()
+	targetCurrency := getTargetCurrency(inputCurrency)
 
 	converted, err := convertCurrencies(inputCurrency, targetCurrency, moneyAmount)
 
@@ -31,14 +33,6 @@ func main() {
 
 	targetCurrencyFormatted := strings.ToUpper(targetCurrency)
 	fmt.Printf("Your converted money amount: %.2f %v \n", converted, targetCurrencyFormatted)
-}
-
-func getUserInput() (string, string, float64) {
-	inputCurrency := getInputCurrency()
-	moneyAmount := getMoneyAmount()
-	targetCurrency := getTargetCurrency(inputCurrency)
-
-	return inputCurrency, targetCurrency, moneyAmount
 }
 
 func getInputCurrencyUserInput() (string, error) {
@@ -75,8 +69,6 @@ func getMoneyAmountUserInput() (float64, error) {
 }
 
 func getTargetCurrencyInput(inputCurrency string) (string, error) {
-	var targetCurrency string
-
 	inputCurrencyFormatted := formatInput(inputCurrency)
 	availableCurrency1, availableCurrency2, err := getAvailableCurrencies(inputCurrencyFormatted)
 
@@ -84,14 +76,16 @@ func getTargetCurrencyInput(inputCurrency string) (string, error) {
 		return "", err
 	}
 
+	var targetCurrency string
 	description := fmt.Sprintf("(%v, %v)", strings.ToUpper(availableCurrency1), strings.ToUpper(availableCurrency2))
+
 	fmt.Printf("Enter your target currency %v:", description)
 	fmt.Scan(&targetCurrency)
 
 	targetCurrencyFormatted := formatInput(targetCurrency)
 
 	if targetCurrencyFormatted == availableCurrency1 || targetCurrencyFormatted == availableCurrency2 {
-		return targetCurrency, nil
+		return targetCurrencyFormatted, nil
 	} else {
 		errorText := fmt.Sprintf("invalid target currency, you're allowed to enter only one of %v", description)
 		return "", errors.New(errorText)
