@@ -22,7 +22,7 @@ const (
 func main() {
 	inputCurrency, targetCurrency, moneyAmount := getUserInput()
 
-	convertedMoneyAmount, err := convertCurrencies(inputCurrency, targetCurrency, moneyAmount)
+	converted, err := convertCurrencies(inputCurrency, targetCurrency, moneyAmount)
 
 	if err != nil {
 		fmt.Printf("Convertion error: %v \n", err)
@@ -30,13 +30,12 @@ func main() {
 	}
 
 	targetCurrencyFormatted := strings.ToUpper(targetCurrency)
-	fmt.Printf("Your converted money amount: %.2f %v \n", convertedMoneyAmount, targetCurrencyFormatted)
-
+	fmt.Printf("Your converted money amount: %.2f %v \n", converted, targetCurrencyFormatted)
 }
 
 func getUserInput() (string, string, float64) {
 	inputCurrency := getInputCurrency()
-	moneyAmount := getMoneyAnount()
+	moneyAmount := getMoneyAmount()
 	targetCurrency := getTargetCurrency(inputCurrency)
 
 	return inputCurrency, targetCurrency, moneyAmount
@@ -77,37 +76,39 @@ func getMoneyAmountUserInput() (float64, error) {
 
 func getTargetCurrencyInput(inputCurrency string) (string, error) {
 	var targetCurrency string
-	var description string
 
 	inputCurrencyFormatted := formatInput(inputCurrency)
+	availableCurrency1, availableCurrency2, err := getAvailableCurrencies(inputCurrencyFormatted)
 
-	switch inputCurrencyFormatted {
-	case eur:
-		description = "(USD, RUB)"
-	case usd:
-		description = "(EUR, RUB)"
-	case rub:
-		description = "(EUR, USD)"
-	default:
-		return "", errors.New("invalid init currency")
+	if err != nil {
+		return "", err
 	}
 
+	description := fmt.Sprintf("(%v, %v)", strings.ToUpper(availableCurrency1), strings.ToUpper(availableCurrency2))
 	fmt.Printf("Enter your target currency %v:", description)
 	fmt.Scan(&targetCurrency)
 
 	targetCurrencyFormatted := formatInput(targetCurrency)
 
-	switch {
-	case inputCurrencyFormatted == eur && (targetCurrencyFormatted == usd || targetCurrencyFormatted == rub):
-	case inputCurrencyFormatted == usd && (targetCurrencyFormatted == eur || targetCurrencyFormatted == rub):
-	case inputCurrencyFormatted == rub && (targetCurrencyFormatted == eur || targetCurrencyFormatted == usd):
+	if targetCurrencyFormatted == availableCurrency1 || targetCurrencyFormatted == availableCurrency2 {
 		return targetCurrency, nil
-	default:
+	} else {
 		errorText := fmt.Sprintf("invalid target currency, you're allowed to enter only one of %v", description)
 		return "", errors.New(errorText)
 	}
+}
 
-	return targetCurrency, nil
+func getAvailableCurrencies(inputCurrency string) (string, string, error) {
+	switch inputCurrency {
+	case eur:
+		return usd, eur, nil
+	case usd:
+		return eur, rub, nil
+	case rub:
+		return eur, usd, nil
+	default:
+		return "", "", errors.New("invalid init currency")
+	}
 }
 
 func convertCurrencies(initCurrency string, targetCurrency string, moneyAmount float64) (float64, error) {
@@ -149,12 +150,12 @@ func getInputCurrency() string {
 	return inputCurrency
 }
 
-func getMoneyAnount() float64 {
+func getMoneyAmount() float64 {
 	moneyAmount, err := getMoneyAmountUserInput()
 
 	if err != nil {
 		fmt.Printf("Error getting input currency - %v\n", err)
-		val := getMoneyAnount()
+		val := getMoneyAmount()
 		return val
 	}
 
